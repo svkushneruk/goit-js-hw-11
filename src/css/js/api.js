@@ -30,7 +30,6 @@ export default class ImageSearchService {
         `https://pixabay.com/api/?key=28095599-4638dd4a9a44e9c8a84be8988&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.page}&per_page=40`
       );
       this.incrementPage();
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error(error);

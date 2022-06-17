@@ -3,7 +3,6 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import ImageSearchService from './css/js/api';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-// import throttle from 'lodash.throttle';
 
 const imageSearchService = new ImageSearchService();
 
@@ -42,32 +41,12 @@ function onSearch(e) {
 
     refs.galleryEl.insertAdjacentHTML('beforeend', markup);
 
-    // const { height: topScroll } = document
-    //   .querySelector('.search-section')
-    //   .getBoundingClientRect();
-    // window.scrollTo(0, topScroll);
-
-    // window.addEventListener('wheel', throttle(scrollGallery, 1000));
     const lightbox = new SimpleLightbox('.gallery a', {});
     showLoadMoreBtn();
     if (data.hits.length > 0 && data.hits.length < 40) {
       Notify.info("We're sorry, but you've reached the end of search results.");
       hideLoadMoreBtn();
     }
-  });
-}
-
-function scrollGallery() {
-  console.log('scroll');
-
-  const { height: cardHeight } =
-    refs.galleryEl.firstElementChild.getBoundingClientRect();
-
-  console.log(cardHeight);
-
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
   });
 }
 
