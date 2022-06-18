@@ -8,17 +8,21 @@
   </head>
   <body>
     <section class="search-section">
-      <form class="search-form" id="search-form">
-        <input
-          type="text"
-          name="searchQuery"
-          autocomplete="off"
-          placeholder="Search images..."
-        />
-        <button type="submit">Search</button>
-      </form>
+      <div class="container">
+        <form class="search-form" id="search-form">
+          <input
+            type="text"
+            name="searchQuery"
+            autocomplete="off"
+            placeholder="Search images..."
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
     </section>
-    <div class="gallery"></div>
+    <div class="container">
+      <div class="gallery"></div>
+    </div>
     <button type="button" class="load-more visually-hidden">Load more</button>
     <script src="index.js" type="module"></script>
   </body>

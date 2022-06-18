@@ -1,6 +1,6 @@
 import './css/styles.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import ImageSearchService from './css/js/api';
+import ImageSearchService from './js/api';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
@@ -11,6 +11,7 @@ const refs = {
   searchBtn: document.querySelector('button[type="submit"]'),
   galleryEl: document.querySelector('.gallery'),
   loadMoreBtnEl: document.querySelector('.load-more'),
+  searchSection: document.querySelector('.search-section'),
 };
 
 refs.formEl.addEventListener('submit', onSearch);
@@ -28,26 +29,42 @@ function onSearch(e) {
     return;
   }
 
-  imageSearchService.fetchImages().then(data => {
-    if (data.totalHits === 0) {
-      Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-      return;
-    }
-    Notify.info(`Hooray! We found ${data.totalHits} images.`);
+  imageSearchService
+    .fetchImages()
+    .then(data => {
+      if (data.totalHits === 0) {
+        Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+        return;
+      }
+      Notify.info(`Hooray! We found ${data.totalHits} images.`);
 
-    const markup = createMarkup(data.hits);
+      const markup = createMarkup(data.hits);
 
-    refs.galleryEl.insertAdjacentHTML('beforeend', markup);
+      refs.galleryEl.insertAdjacentHTML('beforeend', markup);
 
-    const lightbox = new SimpleLightbox('.gallery a', {});
-    showLoadMoreBtn();
-    if (data.hits.length > 0 && data.hits.length < 40) {
-      Notify.info("We're sorry, but you've reached the end of search results.");
-      hideLoadMoreBtn();
-    }
-  });
+      const lightbox = new SimpleLightbox('.gallery a', {});
+      showLoadMoreBtn();
+      if (data.hits.length > 0 && data.hits.length < 40) {
+        Notify.info(
+          "We're sorry, but you've reached the end of search results."
+        );
+        hideLoadMoreBtn();
+      }
+      moveToGallery();
+    })
+    .finally(() => {
+      setTimeout(() => {
+        const { height: cardHeight } =
+          refs.galleryEl.firstElementChild.getBoundingClientRect();
+
+        window.scrollBy({
+          top: cardHeight * 2,
+          behavior: 'smooth',
+        });
+      }, 1000);
+    });
 }
 
 function onLoadMore() {
@@ -59,6 +76,13 @@ function onLoadMore() {
       Notify.info("We're sorry, but you've reached the end of search results.");
       hideLoadMoreBtn();
     }
+  });
+}
+
+function moveToGallery() {
+  const { height: sectionHeight } = refs.searchSection.getBoundingClientRect();
+  window.scrollBy({
+    top: sectionHeight,
   });
 }
 
